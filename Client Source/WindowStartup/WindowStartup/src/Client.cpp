@@ -138,6 +138,11 @@ void Client::ConnectServer()
 
 }
 
+void Client::NullDelInfo()
+{
+	m_deleteInfo.IDRefrence = -1;
+}
+
 void Client::ReadPacket()
 {
 	for (packet = m_Ppeer->Receive(); packet; m_Ppeer->DeallocatePacket(packet), packet = m_Ppeer->Receive())

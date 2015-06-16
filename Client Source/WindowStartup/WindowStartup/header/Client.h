@@ -60,7 +60,7 @@ public:
 	
 	bool TurnOrderPacket();
 	void SetTurnOrder(bool val);
-
+	void NullDelInfo();
 	void ReadPacket();
 	int GetClientID();
 	MoveCheckerInfo GetMoveInfo();
