@@ -105,7 +105,7 @@ Application::Application()
 	TwWindowSize(1280, 720);
 
 	TurnOrder = true;
-
+	m_TurnString = "Hello";
 	m_bar = TwNewBar("Debug Console");
 	TwAddSeparator(m_bar, "Camera position:", "");
 	
@@ -127,6 +127,8 @@ Application::Application()
 	TwAddVarRO(m_bar, "Mouse Pos z: ", TW_TYPE_FLOAT, &tempMousePos.z, "");
 
 	TwAddVarRO(m_bar, "Cooldown: ", TW_TYPE_FLOAT, &cooldown, "");
+	TwAddVarRO(m_bar, "Whose Turn: ", TW_TYPE_STDSTRING, &m_TurnString, "");
+	
 
 	std::cout << "ITS REDS TURN! \n";
 }
@@ -175,6 +177,7 @@ void Application::Update()
 	//GetCursorPos(&mousepos);
 	glfwGetCursorPos(window, &xpos, &ypos);
 	
+	bool OnlyOnce = true;
 	
 	
 	m_Pclient->Update();
@@ -187,18 +190,20 @@ void Application::Update()
 		
 		CheckerPieces[m_Pclient->GetMoveInfo().IDRefrence]->SetPosition(m_Pclient->GetMoveInfo().Position);
 		CheckerPieces[m_Pclient->GetMoveInfo().IDRefrence]->SetKing(m_Pclient->GetMoveInfo().isKing);
-		
-
-		
 	}
 
-	if (m_Pclient->GetDelInfo().IDRefrence != -1)
-	{
-		CheckerPieces[m_Pclient->GetDelInfo().IDRefrence]->setActive(false);
-		//Tiles[m_Pclient->GetDelInfo().ObjectRefrence]->NullCheckerRef();
-		//Tiles[m_Pclient->GetDelInfo().ObjectRefrence]->SetCheckerRefrence(CheckerPieces[m_Pclient->GetMoveInfo().IDRefrence]);
-		//m_Pclient->NullDelInfo();
-	}
+	if (m_PlayerNumber == TurnOrder)
+		m_TurnString = "YOUR TURN!";
+
+	else m_TurnString = "THEIR TURN!";
+
+	//if (m_Pclient->GetDelInfo().IDRefrence != -1)
+	//{
+	//	CheckerPieces[m_Pclient->GetDelInfo().IDRefrence]->setActive(false);
+	//	//Tiles[m_Pclient->GetDelInfo().ObjectRefrence]->NullCheckerRef();
+	//	//Tiles[m_Pclient->GetDelInfo().ObjectRefrence]->SetCheckerRefrence(CheckerPieces[m_Pclient->GetMoveInfo().IDRefrence]);
+	//	//m_Pclient->NullDelInfo();
+	//}
 	
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && m_PlayerNumber == TurnOrder)
@@ -217,6 +222,8 @@ void Application::Update()
 		if (Tiles[i]->MadatoryMove() && Tiles[i]->GetPiece()->GetColour() == TurnOrder)
 		{
 			tempMousePos = Tiles[i]->GetPosition();
+			
+		
 		}
 
 		Tiles[i]->Update(tempMousePos, Tiles);
@@ -233,13 +240,13 @@ void Application::Update()
 
 		if (Tiles[i]->GetPiece() != nullptr && Tiles[i]->GetPiece()->GetID() == m_Pclient->GetDelInfo().IDRefrence)
 		{
+			CheckerPieces[m_Pclient->GetDelInfo().IDRefrence]->setActive(false);
 			Tiles[i]->NullCheckerRef();
-			Tiles[m_Pclient->GetDelInfo().ObjectRefrence]->SetCheckerRefrence(CheckerPieces[m_Pclient->GetMoveInfo().IDRefrence]);
 			m_Pclient->NullDelInfo();
 		
 		}
 
-		if (Tiles[i]->isSelected() && Tiles[i]->GetPiece() != nullptr && Tiles[i]->GetPiece()->GetColour() == TurnOrder)
+		if (Tiles[i]->isSelected() && Tiles[i]->GetPiece() != nullptr && Tiles[i]->GetPiece()->GetColour() == TurnOrder && OnlyOnce)
 		{
 			std::vector<CheckerBoardTile *> TempTile = Tiles[i]->ReturnValidMoves();
 
@@ -251,6 +258,8 @@ void Application::Update()
 				}
 			}
 
+			OnlyOnce = false;
+		}
 		
 		
 
@@ -259,7 +268,7 @@ void Application::Update()
 			Tiles[i]->GetPiece() != nullptr && Tiles[i]->GetPiece()->GetColour() == TurnOrder && m_PlayerNumber == TurnOrder
 			&& cooldown < 0)
 		{
-			cooldown = 1.0f;
+			cooldown = .10f;
 
 			vec3 Tileloc = camera->pickAgainstPlane((float)xpos, (float)ypos, vec4(0, 1, 0, 1));
 			MovePieceRayCast = Tileloc;
@@ -348,7 +357,8 @@ void Application::Update()
 			}
 		}
 	}
-	}
+	
+	
 	currentTime = (float)glfwGetTime();
 	DeltaTime = currentTime - previousTime;
 	previousTime = currentTime;

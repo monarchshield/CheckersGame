@@ -192,7 +192,7 @@ void Client::ReadPacket()
 
 				bsIn.Read(m_deleteInfo.ObjectRefrence);
 				bsIn.Read(m_deleteInfo.IDRefrence);
-				bsIn.Read(m_deleteInfo.JumpAgain);
+				//bsIn.Read(m_deleteInfo.JumpAgain);
 				printf("Delete Packet Recieved!: \n");
 			}
 			break;

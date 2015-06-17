@@ -22,6 +22,7 @@ CheckerPiece::CheckerPiece(vec3 Pos, vec4 Color)
 
 }
 
+
 CheckerPiece::~CheckerPiece()
 {
 
@@ -107,4 +108,9 @@ void CheckerPiece::setActive(bool val)
 vec3 CheckerPiece::GetPosition()
 {
 	return Position;
+}
+
+bool CheckerPiece::GetActive()
+{
+	return isActive;
 }

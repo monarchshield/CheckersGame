@@ -27,8 +27,9 @@ public:
 	void SetKing(bool val);
 	bool GetColour();
 	bool isThisKing();
+
 	void SetObjRefrence(int ref);
-	
+	bool GetActive();
 	vec3 GetPosition();
 	void setActive(bool val);
 	int	GetObjReference();

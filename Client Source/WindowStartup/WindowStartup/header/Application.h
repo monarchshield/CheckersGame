@@ -117,7 +117,7 @@ private:
 	Skybox* m_skybox;
 
 
-
+	std::string m_TurnString;
 
 	ObjLoader* ObjModel;
 	//Stuff to do with textures
