@@ -203,7 +203,7 @@ void CheckerBoardTile::ValidMoves(std::vector<CheckerBoardTile *> Tiles)
 						ValidMoveTiles.push_back(TempTiles[BackLeft]);
 
 						m_Directions.push_back(FRIGHT);
-						m_Directions.push_back(FLEFT);
+						m_Directions.push_back(BLEFT);
 
 						break;
 
